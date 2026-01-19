@@ -1,6 +1,7 @@
 package main
 
 import (
+	"goweb/routes"
 	"net/http"
 )
 
@@ -11,7 +12,7 @@ type Application struct {
 func (app Application) mount() {
 	server := &http.Server{
 		Addr:    ":8080",
-		Handler: routes(app.mux),
+		Handler: routesBinding(app.mux),
 	}
 
 	err := server.ListenAndServe()
@@ -21,7 +22,10 @@ func (app Application) mount() {
 	}
 }
 
-func routes(mux *http.ServeMux) *http.ServeMux {
+func routesBinding(mux *http.ServeMux) *http.ServeMux {
+
+	routes.SetUserRoutes(mux)
+
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		_, _ = w.Write([]byte("Hello World"))
 	})
