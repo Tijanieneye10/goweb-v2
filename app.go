@@ -2,6 +2,7 @@ package main
 
 import (
 	"goweb/routes"
+	"html/template"
 	"net/http"
 )
 
@@ -35,4 +36,18 @@ func routesBinding(mux *http.ServeMux) *http.ServeMux {
 	})
 
 	return mux
+}
+
+func (app Application) render(w http.ResponseWriter, filename string, data interface{}) {
+	tmpl, err := template.ParseFiles(filename)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	err = tmpl.Execute(w, data)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
