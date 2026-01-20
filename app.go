@@ -29,7 +29,7 @@ func routesBinding(mux *http.ServeMux) *http.ServeMux {
 	routes.SetUserRoutes(mux)
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		render.Render(w, "views/index.html", map[string]interface{}{})
+		render.Render(w, "index.html", map[string]interface{}{})
 	})
 
 	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {

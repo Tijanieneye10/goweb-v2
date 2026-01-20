@@ -3,10 +3,14 @@ package render
 import (
 	"html/template"
 	"net/http"
+	"path/filepath"
 )
 
 func Render(w http.ResponseWriter, filename string, data interface{}) {
-	tmpl, err := template.ParseFiles(filename)
+
+	fullPath := filepath.Join("views", filename)
+
+	tmpl, err := template.ParseFiles(fullPath)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
