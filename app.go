@@ -1,6 +1,7 @@
 package main
 
 import (
+	"goweb/render"
 	"goweb/routes"
 	"html/template"
 	"net/http"
@@ -28,7 +29,7 @@ func routesBinding(mux *http.ServeMux) *http.ServeMux {
 	routes.SetUserRoutes(mux)
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte("Hello World"))
+		render.Render(w, "views/index.html", map[string]interface{}{})
 	})
 
 	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
