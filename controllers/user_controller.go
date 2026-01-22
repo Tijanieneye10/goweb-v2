@@ -1,11 +1,20 @@
 package controllers
 
-import "net/http"
+import (
+	"goweb/render"
+	"net/http"
+)
 
-func MyHome(w http.ResponseWriter, r *http.Request) {
-	_, _ = w.Write([]byte("Hello World User"))
+type UserController struct {
+	TmplCache *render.TemplateCache
 }
-
-func SingleUser(w http.ResponseWriter, r *http.Request) {
-	_, _ = w.Write([]byte("Hello World Single User"))
+// NewUserController creates a new UserController with the shared template cache
+func NewUserController(tmplCache *render.TemplateCache) *UserController {
+	return &UserController{TmplCache: tmplCache}
+}
+func (uc *UserController) MyHome(w http.ResponseWriter, r *http.Request) {
+	uc.TmplCache.Render(w, "index.html", map[string]interface{}{})
+}
+func (uc *UserController) SingleUser(w http.ResponseWriter, r *http.Request) {
+	uc.TmplCache.Render(w, "single-user.html", map[string]interface{}{})
 }

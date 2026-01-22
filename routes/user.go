@@ -2,10 +2,13 @@ package routes
 
 import (
 	"goweb/controllers"
+	"goweb/render"
 	"net/http"
 )
 
-func SetUserRoutes(mux *http.ServeMux) {
-	mux.HandleFunc("/user", controllers.MyHome)
-	mux.HandleFunc("/user/{id}", controllers.SingleUser)
+func SetUserRoutes(mux *http.ServeMux, tmplCache *render.TemplateCache) {
+	uc := controllers.NewUserController(tmplCache)
+
+	mux.HandleFunc("/user", uc.MyHome)
+	mux.HandleFunc("/user/{id}", uc.SingleUser)
 }

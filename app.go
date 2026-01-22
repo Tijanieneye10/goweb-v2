@@ -3,33 +3,36 @@ package main
 import (
 	"goweb/render"
 	"goweb/routes"
-	"html/template"
+	"log"
 	"net/http"
+	"text/template"
 )
 
 type Application struct {
-	mux *http.ServeMux
+	mux       *http.ServeMux
+	tmplCache *render.TemplateCache
 }
 
 func (app Application) mount() {
 	server := &http.Server{
-		Addr:    ":8080",
-		Handler: routesBinding(app.mux),
+		Addr:    ":8081",
+		Handler: routesBinding(app.mux, app.tmplCache),
 	}
 
+	log.Println("Starting server on :8080")
 	err := server.ListenAndServe()
 
 	if err != nil {
-		return
+		log.Fatalf("Server failed to start: %v", err)
 	}
 }
 
-func routesBinding(mux *http.ServeMux) *http.ServeMux {
+func routesBinding(mux *http.ServeMux, tmplCache *render.TemplateCache) *http.ServeMux {
 
-	routes.SetUserRoutes(mux)
+	routes.SetUserRoutes(mux, tmplCache)
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		render.Render(w, "index.html", map[string]interface{}{})
+		tmplCache.Render(w, "index.html", map[string]interface{}{})
 	})
 
 	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
