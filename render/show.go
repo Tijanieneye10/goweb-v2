@@ -38,10 +38,41 @@ func NewTemplateCache(templateDir string, isDev bool) *TemplateCache {
 	}
 }
 
-func (t *TemplateCache) Render(w http.ResponseWriter, name string, data interface{}) error {
+func (t *TemplateCache) Render(w http.ResponseWriter, name string, data interface{}) {
+	tmpl, err := t.getTemplateFromCache(name)
+	if !err {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+
+	err = tmpl.Execute(w, data)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 
 }
 
-func RenderWithCache(w http.ResponseWriter, filename string, data interface{}) {
+func (t *TemplateCache) getTemplateFromCache(name string) (*template.Template, error) {
+	if !t.isDev {
+		t.mutex.RLock()
+		if tmpl, ok := t.cache[name]; ok {
+			t.mutex.RUnlock()
+			return tmpl, nil
+		}
+	}
 
+	tmpl, err := t.parseTemplate(name)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if !t.isDev {
+		t.mutex.RLock()
+		t.cache[name] = tmpl
+		t.mutex.RUnlock()
+		return tmpl, nil
+	}
+	return tmpl, nil
 }
