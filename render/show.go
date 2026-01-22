@@ -31,6 +31,17 @@ func Render(w http.ResponseWriter, filename string, data interface{}) {
 	}
 }
 
+func NewTemplateCache(templateDir string, isDev bool) *TemplateCache {
+	return &TemplateCache{
+		cache: make(map[string]*template.Template),
+		isDev: isDev,
+	}
+}
+
+func (t *TemplateCache) Render(w http.ResponseWriter, name string, data interface{}) error {
+
+}
+
 func RenderWithCache(w http.ResponseWriter, filename string, data interface{}) {
 
 }
