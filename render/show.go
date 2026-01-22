@@ -3,6 +3,7 @@ package render
 import (
 	"html/template"
 	"net/http"
+	"path"
 	"path/filepath"
 	"sync"
 )
@@ -75,4 +76,27 @@ func (t *TemplateCache) getTemplateFromCache(name string) (*template.Template, e
 		return tmpl, nil
 	}
 	return tmpl, nil
+}
+
+func (t *TemplateCache) parseTemplate(name string) (*template.Template, error) {
+	templateDir := path.Join(t.templateDir, name)
+
+	files := []string{templateDir}
+
+	layoutPath := path.Join(templateDir, "layouts/*.html")
+
+	layout, err := filepath.Glob(layoutPath)
+
+	if err == nil {
+		files = append(files, layout...)
+	}
+
+	layoutPath := path.Join(templateDir, "layouts/*.html")
+
+	layout, err := filepath.Glob(layoutPath)
+
+	if err == nil {
+		files = append(files, layout...)
+	}
+
 }
