@@ -1,0 +1,13 @@
+{{define "content"}}
+
+<h5>Register</h5>
+
+{{if .Error}}
+<div class="alert alert-danger" role="alert">{{.Error}}</div>
+{{end}}
+<form action="">
+    <input type="text" name="username" placeholder="username" />
+    <input type="password" name="password" placeholder="password" />
+    <input type="submit" />
+</form>
+{{end}}
