@@ -23,3 +23,7 @@ func (uc *UserController) SingleUser(w http.ResponseWriter, r *http.Request) {
 func (uc *UserController) Login(w http.ResponseWriter, r *http.Request) {
 	uc.TmplCache.Render(w, "login.html", map[string]interface{}{})
 }
+
+func (uc *UserController) Register(w http.ResponseWriter, r *http.Request) {
+	uc.TmplCache.Render(w, "register.html", map[string]interface{}{})
+}

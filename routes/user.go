@@ -14,4 +14,5 @@ func SetUserRoutes(mux *http.ServeMux, tmplCache *render.TemplateCache) {
 	mux.HandleFunc("/user", uc.MyHome)
 	mux.HandleFunc("/user/{id}", uc.SingleUser)
 	mux.HandleFunc("/login", uc.Login)
+	mux.HandleFunc("/register", uc.Register)
 }
