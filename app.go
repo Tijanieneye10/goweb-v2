@@ -19,7 +19,7 @@ func (app Application) mount() {
 		Handler: routesBinding(app.mux, app.tmplCache),
 	}
 
-	log.Println("Starting server on :8080")
+	log.Println("Starting server on ", server.Addr)
 	err := server.ListenAndServe()
 
 	if err != nil {
