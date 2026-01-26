@@ -48,7 +48,7 @@ func (t *TemplateCache) Render(w http.ResponseWriter, name string, data interfac
 		return
 	}
 
-	err = tmpl.Execute(w, data)
+	err = tmpl.ExecuteTemplate(w, "base.html", data)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -88,11 +88,13 @@ func (t *TemplateCache) getTemplateFromCache(name string) (*template.Template, e
 }
 
 func (t *TemplateCache) parseTemplate(name string) (*template.Template, error) {
-	templateDir := path.Join(t.templateDir, name)
+	// The actual page template (e.g., views/index.html)
+	pagePath := path.Join(t.templateDir, name)
 
-	files := []string{templateDir}
+	files := []string{pagePath}
 
-	layoutPath := path.Join(templateDir, "layouts/*.html")
+	// Look for layouts in views/templates/layouts/
+	layoutPath := path.Join(t.templateDir, "templates/layouts/*.html")
 
 	layouts, err := filepath.Glob(layoutPath)
 
@@ -100,7 +102,8 @@ func (t *TemplateCache) parseTemplate(name string) (*template.Template, error) {
 		files = append(files, layouts...)
 	}
 
-	partialPath := path.Join(templateDir, "partials/*.html")
+	// Look for partials in views/templates/partials/
+	partialPath := path.Join(t.templateDir, "templates/partials/*.html")
 
 	partials, err := filepath.Glob(partialPath)
 

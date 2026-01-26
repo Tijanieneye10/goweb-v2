@@ -15,7 +15,7 @@ type Application struct {
 
 func (app Application) mount() {
 	server := &http.Server{
-		Addr:    ":8081",
+		Addr:    ":8082",
 		Handler: routesBinding(app.mux, app.tmplCache),
 	}
 
