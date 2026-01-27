@@ -9,6 +9,7 @@ import (
 	"text/template"
 
 	"github.com/golangcollege/sessions"
+	"github.com/justinas/alice"
 )
 
 type Application struct {
@@ -19,7 +20,7 @@ type Application struct {
 
 func (app Application) mount() {
 	server := &http.Server{
-		Addr:    ":8082",
+		Addr:    ":8080",
 		Handler: routesBinding(app.mux, app.tmplCache, app.session),
 	}
 
@@ -33,7 +34,9 @@ func (app Application) mount() {
 
 func routesBinding(mux *http.ServeMux, tmplCache *render.TemplateCache, session *sessions.Session) http.Handler {
 
-	routes.SetUserRoutes(mux, tmplCache)
+	routes.SetUserRoutes(mux, tmplCache, session)
+
+	defaultMiddleware := alice.New(middleware.RecoverHandler, session.Enable)
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		tmplCache.Render(w, "index.html", map[string]interface{}{})
@@ -43,7 +46,7 @@ func routesBinding(mux *http.ServeMux, tmplCache *render.TemplateCache, session 
 		_, _ = w.Write([]byte("OK"))
 	})
 
-	return middleware.RecoverHandler(session.Enable(mux))
+	return defaultMiddleware.Then(mux)
 }
 
 func (app Application) render(w http.ResponseWriter, filename string, data interface{}) {
