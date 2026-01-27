@@ -20,7 +20,7 @@ type Application struct {
 func (app Application) mount() {
 	server := &http.Server{
 		Addr:    ":8082",
-		Handler: routesBinding(app.mux, app.tmplCache),
+		Handler: routesBinding(app.mux, app.tmplCache, app.session),
 	}
 
 	log.Println("Starting server on ", server.Addr)
@@ -31,7 +31,7 @@ func (app Application) mount() {
 	}
 }
 
-func routesBinding(mux *http.ServeMux, tmplCache *render.TemplateCache) http.Handler {
+func routesBinding(mux *http.ServeMux, tmplCache *render.TemplateCache, session *sessions.Session) http.Handler {
 
 	routes.SetUserRoutes(mux, tmplCache)
 
@@ -43,7 +43,7 @@ func routesBinding(mux *http.ServeMux, tmplCache *render.TemplateCache) http.Han
 		_, _ = w.Write([]byte("OK"))
 	})
 
-	return middleware.RecoverHandler(mux)
+	return middleware.RecoverHandler(session.Enable(mux))
 }
 
 func (app Application) render(w http.ResponseWriter, filename string, data interface{}) {
