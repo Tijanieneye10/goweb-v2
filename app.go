@@ -7,11 +7,14 @@ import (
 	"log"
 	"net/http"
 	"text/template"
+
+	"github.com/golangcollege/sessions"
 )
 
 type Application struct {
 	mux       *http.ServeMux
 	tmplCache *render.TemplateCache
+	session   *sessions.Session
 }
 
 func (app Application) mount() {
