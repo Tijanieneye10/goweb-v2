@@ -1,6 +1,7 @@
 package main
 
 import (
+	"goweb/middleware"
 	"goweb/render"
 	"goweb/routes"
 	"log"
@@ -27,7 +28,7 @@ func (app Application) mount() {
 	}
 }
 
-func routesBinding(mux *http.ServeMux, tmplCache *render.TemplateCache) *http.ServeMux {
+func routesBinding(mux *http.ServeMux, tmplCache *render.TemplateCache) http.Handler {
 
 	routes.SetUserRoutes(mux, tmplCache)
 
@@ -39,7 +40,7 @@ func routesBinding(mux *http.ServeMux, tmplCache *render.TemplateCache) *http.Se
 		_, _ = w.Write([]byte("OK"))
 	})
 
-	return mux
+	return middleware.Intersect(mux)
 }
 
 func (app Application) render(w http.ResponseWriter, filename string, data interface{}) {
