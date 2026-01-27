@@ -3,7 +3,6 @@ package routes
 import (
 	"goweb/controllers"
 	"goweb/render"
-	"goweb/views/middleware"
 	"net/http"
 )
 
@@ -17,5 +16,4 @@ func SetUserRoutes(mux *http.ServeMux, tmplCache *render.TemplateCache) {
 	mux.HandleFunc("/login", uc.Login)
 	mux.HandleFunc("/register", uc.Register)
 
-	middleware.Intersect(mux)
 }
