@@ -12,9 +12,9 @@ func SetUserRoutes(mux *http.ServeMux, tmplCache *render.TemplateCache) {
 
 	mux.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("./public"))))
 
-	mux.HandleFunc("/user", middleware.Intersect(uc.MyHome))
-	mux.HandleFunc("/user/{id}", middleware.Intersect(uc.SingleUser))
-	mux.HandleFunc("/login", uc.Login)
-	mux.HandleFunc("/register", uc.Register)
+	mux.Handle("/user", middleware.Intersect(http.HandlerFunc(uc.MyHome)))
+	mux.Handle("/user/{id}", middleware.Intersect(http.HandlerFunc(uc.SingleUser)))
+	mux.Handle("/login", middleware.Intersect(http.HandlerFunc(uc.Login)))
+	mux.Handle("/register", middleware.Intersect(http.HandlerFunc(uc.Register)))
 
 }

@@ -13,6 +13,7 @@ type UserController struct {
 func NewUserController(tmplCache *render.TemplateCache) *UserController {
 	return &UserController{TmplCache: tmplCache}
 }
+
 func (uc *UserController) MyHome(w http.ResponseWriter, r *http.Request) {
 	uc.TmplCache.Render(w, "index.html", map[string]interface{}{})
 }

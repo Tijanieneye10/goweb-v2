@@ -5,14 +5,12 @@ import (
 	"net/http"
 )
 
-func Intersect(next http.HandlerFunc) http.HandlerFunc {
+func Intersect(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log.Printf("%s %s %s %s", r.RemoteAddr, r.Method, r.URL, "its working")
-		next(w, r)
+		next.ServeHTTP(w, r)
 	})
 }
-
-
 
 // RecoverHandler wraps the entire mux - use this for global recovery
 func RecoverHandler(next http.Handler) http.Handler {
