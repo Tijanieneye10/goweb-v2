@@ -1,6 +1,7 @@
 package main
 
 import (
+	"goweb/middleware"
 	"goweb/render"
 	"goweb/routes"
 	"log"
@@ -39,7 +40,7 @@ func routesBinding(mux *http.ServeMux, tmplCache *render.TemplateCache) http.Han
 		_, _ = w.Write([]byte("OK"))
 	})
 
-	return mux
+	return middleware.RecoverHandler(mux)
 }
 
 func (app Application) render(w http.ResponseWriter, filename string, data interface{}) {
