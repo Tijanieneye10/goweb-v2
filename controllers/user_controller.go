@@ -36,5 +36,14 @@ func (uc *UserController) Register(w http.ResponseWriter, r *http.Request) {
 }
 
 func (uc *UserController) StoreLogin(w http.ResponseWriter, r *http.Request) {
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	}
+
+	email := r.PostFormValue("email")
+	password := r.PostFormValue("password")
+
+	fmt.Printf("email: %s, password: %s\n", email, password)
+
 	uc.Session.Put(r, "userId", "johndoe@gmail.com")
 }
