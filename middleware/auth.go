@@ -16,6 +16,7 @@ func RequireAuth(next http.Handler) http.Handler {
 		}
 
 		w.Header().Set("Cache-Control", "no-cache")
+		next.ServeHTTP(w, r)
 	})
 }
 
