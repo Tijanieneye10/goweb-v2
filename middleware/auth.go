@@ -14,6 +14,8 @@ func RequireAuth(next http.Handler) http.Handler {
 		if !isAuthenticated(r) {
 			http.Redirect(w, r, fmt.Sprintf("/login?redirectTo=%s", r.URL.Path), http.StatusFound)
 		}
+
+		w.Header().Set("Cache-Control", "no-cache")
 	})
 }
 
