@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/url"
 	"strings"
+	"unicode/utf8"
 )
 
 type error map[string][]string
@@ -49,7 +50,18 @@ func (f *Form) Required(fields ...string) *Form {
 
 func (f *Form) MaxLength(field string, n int) *Form {
 	value := f.Get(field)
-	if len(value) > n {
+	if utf8.RuneCountInString(value) > n {
+		f.Error.Add(field, fmt.Sprintf("%s can't be more than %d", field, n))
+	}
+
+	return f
+}
+
+func (f *Form) MinLength(field string, n int) *Form {
+	value := f.Get(field)
+	if utf8.RuneCountInString(value) < n {
 		f.Error.Add(field, fmt.Sprintf("%s can't be more than %v", field, n))
 	}
+
+	return f
 }
