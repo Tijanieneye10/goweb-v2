@@ -1,11 +1,11 @@
 package validations
 
-var errors map[string][]string
+type Error map[string][]string
 
-func Add(field, message string) {
-	errors[field] = append(errors[field], message)
+func (e Error) Add(field, message string) {
+	e[field] = append(e[field], message)
 }
 
-func Get(field string) []string {
-	return errors[field]
+func (e Error) Get(field string) []string {
+	return e[field]
 }
