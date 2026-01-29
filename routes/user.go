@@ -12,6 +12,7 @@ import (
 
 func SetUserRoutes(mux *http.ServeMux, tmplCache *render.TemplateCache, session *sessions.Session) {
 	uc := controllers.NewUserController(tmplCache, session)
+
 	securityMiddleware := alice.New(session.Enable, middleware.RequireAuth)
 
 	mux.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("./public"))))
