@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"net/url"
-	"regexp"
+	"net/mail"
 	"unicode/utf8"
 )
 
@@ -56,4 +56,7 @@ func (f *Form) MaxLength(field string, n int) *Form {
 	return f
 }
 
-func (f *Form) Email(field string) *Form {}
+func (f *Form) Email(field string) *Form {
+	value := f.Get(field)
+	http.Email(value, field)
+}
