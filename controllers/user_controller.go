@@ -3,6 +3,7 @@ package controllers
 import (
 	"fmt"
 	"goweb/render"
+	"goweb/validations"
 	"net/http"
 
 	"github.com/golangcollege/sessions"
@@ -42,6 +43,17 @@ func (uc *UserController) StoreLogin(w http.ResponseWriter, r *http.Request) {
 
 	email := r.PostFormValue("email")
 	password := r.PostFormValue("password")
+
+	form := validations.NewForm(r.PostForm)
+
+	form.Required("email", "password").
+		MaxLength("password", 25).
+		MinLength("password", 8).
+		Email("email")
+
+	if !form.Valid() {
+		fmt.Printf("The form errors %+v", form.Error)
+	}
 
 	fmt.Printf("email: %s, password: %s\n", email, password)
 
