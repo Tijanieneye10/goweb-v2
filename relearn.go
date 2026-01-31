@@ -56,4 +56,4 @@ func (f *Form) MaxLength(field string, n int) *Form {
 	return f
 }
 
-func (f *Form) Email(field string, pattern *regexp.Regexp) *Form {}
+func (f *Form) Email(field string) *Form {}
