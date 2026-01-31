@@ -44,3 +44,5 @@ func (f *Form) MinLength(field string, n int) *Form {
 	}
 	return f
 }
+
+func (f *Form) MaxLength(field string, n int) *Form {}
