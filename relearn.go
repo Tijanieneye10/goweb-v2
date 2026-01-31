@@ -45,4 +45,10 @@ func (f *Form) MinLength(field string, n int) *Form {
 	return f
 }
 
-func (f *Form) MaxLength(field string, n int) *Form {}
+func (f *Form) MaxLength(field string, n int) *Form {
+	value := f.Get(field)
+	valueLen := utf8.RuneCountInString(value)
+	if valueLen > n {
+		f.Add(field, fmt.Sprintf("%s is required", field))
+	}
+}
