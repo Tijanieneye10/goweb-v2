@@ -51,4 +51,6 @@ func (f *Form) MaxLength(field string, n int) *Form {
 	if valueLen > n {
 		f.Add(field, fmt.Sprintf("%s is required", field))
 	}
+
+	return f
 }
