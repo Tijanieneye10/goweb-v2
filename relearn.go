@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/url"
+	"regexp"
 	"unicode/utf8"
 )
 
@@ -54,3 +55,5 @@ func (f *Form) MaxLength(field string, n int) *Form {
 
 	return f
 }
+
+func (f *Form) MatchesPattern(field string, pattern *regexp.Regexp) *Form {}
