@@ -58,9 +58,12 @@ func (f *Form) MaxLength(field string, n int) *Form {
 
 func (f *Form) Email(field string) *Form {
 	value := f.Get(field)
-	email, err := mail.ParseAddress(value)
+	_, err := mail.ParseAddress(value)
 
 	if err != nil {
 		f.Add(field, fmt.Sprintf("%s is invalid", field))
 	}
+
+	return f
+
 }
