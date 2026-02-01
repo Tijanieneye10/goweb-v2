@@ -26,6 +26,13 @@ type Form struct {
 	Error customError
 }
 
+func NewForm(data url.Values) *Form {
+	return &Form{
+		Values: data,
+		Error:  customError(map[string][]string{}),
+	}
+}
+
 func (f *Form) Required(fields ...string) *Form {
 	for _, field := range fields {
 		if utf8.RuneCountInString(field) > 1 {
