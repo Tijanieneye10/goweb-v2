@@ -72,5 +72,4 @@ func (f *Form) Email(field string) *Form {
 	}
 
 	return f
-
 }
