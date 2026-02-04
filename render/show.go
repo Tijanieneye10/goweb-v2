@@ -1,12 +1,15 @@
 package render
 
 import (
+	"goweb/validations"
 	"html/template"
 	"log"
 	"net/http"
 	"path"
 	"path/filepath"
 	"sync"
+
+	"github.com/golangcollege/sessions"
 )
 
 type TemplateCache struct {
@@ -16,7 +19,22 @@ type TemplateCache struct {
 	templateDir string
 }
 
-func Render(w http.ResponseWriter, filename string, data interface{}) {
+type TemplateData struct {
+	Form            validations.Form
+	IsAuthenticated bool
+	FlashMessage    string
+}
+
+func DefaultTemplateData(data *TemplateData, r *http.Request, session *sessions.Session) *TemplateData {
+	if data == nil {
+		data = &TemplateData{}
+	}
+
+	data.FlashMessage = session.PopString(r, "flash_message")
+	return data
+}
+
+func Render(w http.ResponseWriter, r *http.Request, filename string, data *TemplateData, session *sessions.Session) {
 
 	fullPath := filepath.Join("views", filename)
 
@@ -27,7 +45,7 @@ func Render(w http.ResponseWriter, filename string, data interface{}) {
 		return
 	}
 
-	if err := tmpl.Execute(w, data); err != nil {
+	if err := tmpl.Execute(w, DefaultTemplateData(data, r, session)); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -67,13 +85,13 @@ func (t *TemplateCache) getTemplateFromCache(name string) (*template.Template, e
 			return tmpl, nil
 		}
 		t.mutex.RUnlock() // Must release RLock before parsing and acquiring write Lock
-		log.Printf("[CACHE DEBUG] ❌ CACHE MISS for: %s, parsing template...", name)
+		log.Printf("[CACHE DEBUG] CACHE MISS for: %s, parsing template...", name)
 	}
 
 	tmpl, err := t.parseTemplate(name)
 
 	if err != nil {
-		log.Printf("[CACHE DEBUG] ⚠️ Parse error for %s: %v", name, err)
+		log.Printf("[CACHE DEBUG] Parse error for %s: %v", name, err)
 		return nil, err
 	}
 
