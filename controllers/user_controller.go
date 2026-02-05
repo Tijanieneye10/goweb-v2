@@ -40,7 +40,8 @@ func (uc *UserController) Login(w http.ResponseWriter, r *http.Request) {
 }
 
 func (uc *UserController) Register(w http.ResponseWriter, r *http.Request) {
-	uc.TmplCache.Render(w, "register.html", map[string]interface{}{})
+	data := render.DefaultTemplateData(uc.data, r, uc.Session)
+	uc.TmplCache.Render(w, r, "register.html", data, uc.Session)
 }
 
 func (uc *UserController) StoreLogin(w http.ResponseWriter, r *http.Request) {
