@@ -12,24 +12,31 @@ import (
 type UserController struct {
 	TmplCache *render.TemplateCache
 	Session   *sessions.Session
+	data      *render.TemplateData
 }
 
 // NewUserController creates a new UserController with the shared template cache
 func NewUserController(tmplCache *render.TemplateCache, session *sessions.Session) *UserController {
-	return &UserController{TmplCache: tmplCache}
+	return &UserController{
+		TmplCache: tmplCache,
+		Session:   session,
+	}
 }
 
 func (uc *UserController) MyHome(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("Session data: %s", uc.Session.GetString(r, "userId"))
-	uc.TmplCache.Render(w, "index.html", map[string]interface{}{})
+	data := render.DefaultTemplateData(uc.data, r, uc.Session)
+	uc.TmplCache.Render(w, r, "index.html", data, uc.Session)
 }
 func (uc *UserController) SingleUser(w http.ResponseWriter, r *http.Request) {
-	uc.TmplCache.Render(w, "single-user.html", map[string]interface{}{})
+	data := render.DefaultTemplateData(uc.data, r, uc.Session)
+	uc.TmplCache.Render(w, r, "single-user.html", data, uc.Session)
 }
 
 func (uc *UserController) Login(w http.ResponseWriter, r *http.Request) {
 	uc.Session.Put(r, "userId", "johndoe@gmail.com")
-	uc.TmplCache.Render(w, "login.html", map[string]interface{}{})
+	data := render.DefaultTemplateData(uc.data, r, uc.Session)
+	uc.TmplCache.Render(w, r, "login.html", data, uc.Session)
 }
 
 func (uc *UserController) Register(w http.ResponseWriter, r *http.Request) {

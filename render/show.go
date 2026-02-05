@@ -59,14 +59,14 @@ func NewTemplateCache(templateDir string, isDev bool) *TemplateCache {
 	}
 }
 
-func (t *TemplateCache) Render(w http.ResponseWriter, name string, data interface{}) {
+func (t *TemplateCache) Render(w http.ResponseWriter, r *http.Request, name string, data *TemplateData, session *sessions.Session) {
 	tmpl, err := t.getTemplateFromCache(name)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return
 	}
 
-	err = tmpl.ExecuteTemplate(w, "base.html", data)
+	err = tmpl.ExecuteTemplate(w, "base.html", DefaultTemplateData(data, r, session))
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
