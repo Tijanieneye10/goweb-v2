@@ -15,7 +15,7 @@ type UserController struct {
 	data      *render.TemplateData
 }
 
-// NewUserController creates a new UserController with the shared template cache
+// NewUserController creates a new UserController with the shared template cache.
 func NewUserController(tmplCache *render.TemplateCache, session *sessions.Session) *UserController {
 	return &UserController{
 		TmplCache: tmplCache,
