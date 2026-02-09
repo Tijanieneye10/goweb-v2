@@ -25,8 +25,10 @@ func NewUserController(tmplCache *render.TemplateCache, session *sessions.Sessio
 
 func (uc *UserController) MyHome(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("Session data: %s", uc.Session.GetString(r, "userId"))
-	data := render.DefaultTemplateData(uc.data, r, uc.Session)
-	uc.TmplCache.Render(w, r, "index.html", data, uc.Session)
+
+	uc.TmplCache.Render(w, r, "index.html", &render.TemplateData{
+		Form: validations.NewForm(r.PostForm),
+	}, uc.Session)
 }
 func (uc *UserController) SingleUser(w http.ResponseWriter, r *http.Request) {
 	data := render.DefaultTemplateData(uc.data, r, uc.Session)

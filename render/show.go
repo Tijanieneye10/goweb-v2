@@ -1,10 +1,10 @@
 package render
 
 import (
-	"goweb/validations"
 	"html/template"
 	"log"
 	"net/http"
+	"net/url"
 	"path"
 	"path/filepath"
 	"sync"
@@ -20,7 +20,7 @@ type TemplateCache struct {
 }
 
 type TemplateData struct {
-	Form            validations.Form
+	Form            url.Values
 	IsAuthenticated bool
 	FlashMessage    string
 }
