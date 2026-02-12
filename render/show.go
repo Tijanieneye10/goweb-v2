@@ -20,7 +20,7 @@ type TemplateCache struct {
 }
 
 type TemplateData struct {
-	Form            validations.Form
+	Form            *validations.Form
 	IsAuthenticated bool
 	FlashMessage    string
 }
