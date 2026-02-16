@@ -61,8 +61,13 @@ func (uc *UserController) StoreLogin(w http.ResponseWriter, r *http.Request) {
 		MinLength("password", 8).
 		Email("email")
 
+	form.Add("generic", "Something went wrong")
+
 	if !form.Valid() {
-		fmt.Printf("The form errors %+v", form.Error)
+		uc.TmplCache.Render(w, r, "login.html", &render.TemplateData{
+			Form: form,
+		}, uc.Session)
+		return
 	}
 
 	fmt.Printf("email: %s, password: %s\n", email, password)

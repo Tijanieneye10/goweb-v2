@@ -6,16 +6,23 @@
         <p class="text-slate-600">Sign in to your account</p>
     </div>
 
+    {{with .Form }}
+    {{with .Error.Get "generic" }}
+    <div class="flex justify-center text-red-600">
+        {{ .generic }}
+    </div>
+    {{ end }}
+
 
     {{if .Error}}
     <p>
         {{.Error}}
     </p>
     {{end}}
-
+    {{ end }}
     <form action="/login" method="POST" class="space-y-5">
         <div>
-            <input type="email" placeholder="Email Address" name="email"
+            <input type="email" placeholder="Email Address" name="email" value="">
                    class="w-full px-6 py-4 rounded-2xl bg-white border border-transparent focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all shadow-sm">
         </div>
 
@@ -37,6 +44,8 @@
             Login
         </button>
     </form>
+
+
 
     <div class="relative my-8">
         <div class="absolute inset-0 flex items-center"><span class="w-full border-t border-slate-300"></span></div>

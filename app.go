@@ -39,7 +39,7 @@ func routesBinding(mux *http.ServeMux, tmplCache *render.TemplateCache, session 
 	defaultMiddleware := alice.New(middleware.RecoverHandler, session.Enable)
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		tmplCache.Render(w, "index.html", map[string]interface{}{})
+		tmplCache.Render(w, r, "index.html", nil, session)
 	})
 
 	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
