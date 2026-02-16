@@ -21,7 +21,7 @@
     {{ end }}
     <form action="/login" method="POST" class="space-y-5">
         <div>
-            <input type="email" placeholder="Email Address" name="email" value="{{ .Form.Email }}" required
+            <input type="email" placeholder="Email Address" name="email" value="{{if .Form}}{{ .Form.Get "email" }}{{end}}" required
                    class="w-full px-6 py-4 rounded-2xl bg-white border border-transparent focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all shadow-sm">
         </div>
 
