@@ -1,6 +1,7 @@
 package main
 
 import (
+	"goweb/models"
 	"goweb/render"
 	"net/http"
 	"time"
@@ -19,6 +20,7 @@ func main() {
 		mux:       http.NewServeMux(),
 		tmplCache: render.NewTemplateCache("views", true), // false = production mode (cache enabled)
 		session:   session,
+		users:     models.NewUserStore(),
 	}
 
 	app.mount()

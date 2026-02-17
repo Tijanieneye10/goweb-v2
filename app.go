@@ -2,6 +2,7 @@ package main
 
 import (
 	"goweb/middleware"
+	"goweb/models"
 	"goweb/render"
 	"goweb/routes"
 	"log"
@@ -16,12 +17,13 @@ type Application struct {
 	mux       *http.ServeMux
 	tmplCache *render.TemplateCache
 	session   *sessions.Session
+	users     *models.UserStore
 }
 
 func (app Application) mount() {
 	server := &http.Server{
 		Addr:    ":8080",
-		Handler: routesBinding(app.mux, app.tmplCache, app.session),
+		Handler: routesBinding(app.mux, app.tmplCache, app.session, app.users),
 	}
 
 	log.Println("Starting server on ", server.Addr)
@@ -32,9 +34,9 @@ func (app Application) mount() {
 	}
 }
 
-func routesBinding(mux *http.ServeMux, tmplCache *render.TemplateCache, session *sessions.Session) http.Handler {
+func routesBinding(mux *http.ServeMux, tmplCache *render.TemplateCache, session *sessions.Session, users *models.UserStore) http.Handler {
 
-	routes.SetUserRoutes(mux, tmplCache, session)
+	routes.SetUserRoutes(mux, tmplCache, session, users)
 
 	defaultMiddleware := alice.New(middleware.RecoverHandler, session.Enable)
 

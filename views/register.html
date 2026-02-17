@@ -1,13 +1,67 @@
 {{define "content"}}
+<div class="bg-white/60 backdrop-blur-xl border border-white/20 p-10 rounded-[3rem] shadow-2xl w-full max-w-md">
 
-<h5>Register</h5>
+    <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-slate-800 mb-2">Create Account</h1>
+        <p class="text-slate-600">Sign up to get started</p>
+    </div>
 
-{{if .Error}}
-<div class="alert alert-danger" role="alert">{{.Error}}</div>
-{{end}}
-<form action="/register" method="post">
-    <input type="text" name="username" placeholder="username" />
-    <input type="password" name="password" placeholder="password" />
-    <input type="submit" />
-</form>
+    {{with .FlashMessage}}
+    <div class="mb-4 p-3 bg-green-100 text-green-700 rounded-xl text-center text-sm">
+        {{.}}
+    </div>
+    {{end}}
+
+    {{with .Form}}
+    {{with .Error.Get "generic"}}
+    <div class="flex justify-center text-red-600 mb-4">
+        {{.}}
+    </div>
+    {{end}}
+
+    <form action="/register" method="POST" class="space-y-5">
+        <div>
+            {{with $.Form.Error.Get "name"}}
+            <p class="text-red-600 text-sm mb-1">{{.}}</p>
+            {{end}}
+            <input type="text" placeholder="Full Name" name="name" value="{{$.Form.Get "name"}}"
+                   class="w-full px-6 py-4 rounded-2xl bg-white border border-transparent focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all shadow-sm">
+        </div>
+
+        <div>
+            {{with $.Form.Error.Get "email"}}
+            <p class="text-red-600 text-sm mb-1">{{.}}</p>
+            {{end}}
+            <input type="email" placeholder="Email Address" name="email" value="{{$.Form.Get "email"}}"
+                   class="w-full px-6 py-4 rounded-2xl bg-white border border-transparent focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all shadow-sm">
+        </div>
+
+        <div>
+            {{with $.Form.Error.Get "password"}}
+            <p class="text-red-600 text-sm mb-1">{{.}}</p>
+            {{end}}
+            <input type="password" placeholder="Password" name="password"
+                   class="w-full px-6 py-4 rounded-2xl bg-white border border-transparent focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all shadow-sm">
+        </div>
+
+        <div>
+            {{with $.Form.Error.Get "confirm_password"}}
+            <p class="text-red-600 text-sm mb-1">{{.}}</p>
+            {{end}}
+            <input type="password" placeholder="Confirm Password" name="confirm_password"
+                   class="w-full px-6 py-4 rounded-2xl bg-white border border-transparent focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all shadow-sm">
+        </div>
+
+        <button type="submit"
+                class="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-bold rounded-full shadow-lg hover:shadow-blue-500/30 hover:scale-[1.02] active:scale-95 transition-all duration-200">
+            Sign Up
+        </button>
+    </form>
+    {{end}}
+
+    <p class="text-center text-slate-600 text-sm mt-8">
+        Already have an account?
+        <a href="/login" class="text-blue-600 font-bold hover:underline">Log in</a>
+    </p>
+</div>
 {{end}}

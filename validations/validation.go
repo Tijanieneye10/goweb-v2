@@ -83,6 +83,13 @@ func (f *Form) Email(field string) *Form {
 	return f
 }
 
+func (f *Form) Matches(field, otherField string) *Form {
+	if f.Get(field) != f.Get(otherField) {
+		f.Error.Add(field, fmt.Sprintf("%s must match %s", field, otherField))
+	}
+	return f
+}
+
 func (f *Form) Valid() bool {
 	return len(f.Error) == 0
 }
